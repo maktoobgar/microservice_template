@@ -1,0 +1,49 @@
+databases:
+  - type: "sqlite3"
+    name: "test"
+    db_name: "test.db"
+
+  # - name: "main"
+  #   type: "postgres"
+  #   username: "postgres"
+  #   password: "M123456789H"
+  #   db_name: "project_db"
+  #   host: "127.0.0.1"
+  #   port: 5432
+  #   ssl_mode: "disable"
+  #   time_zone: "Asia/Tehran"
+  #   charset: "utf8mb4"
+
+translator:
+  path: "../build/translations"
+
+logging:
+  path: "/var/log/project"
+  pattern: "%Y-%m-%d"
+  max_age: "720h" # One month
+  rotation_time: "24h"
+  rotation_size: "20MB"
+
+gateway:
+  ip: 127.0.0.1
+  port: 3000
+
+microservices:
+  auth:
+    ip: 127.0.0.1
+    port: 3001
+
+debug: true
+domain: ""
+# allow_origins: "example.com, example.org"
+allow_origins: "*"
+# allow_headers: "Token, Another"
+allow_headers: "Token"
+# 3600 seconds (one hour)
+max_age: 3600
+# Timeout in seconds
+timeout: 20
+# At most 200 requests gets handled in server and
+# others wait for one of them to go out
+max_concurrent_requests: 200
+secret_key: "update_me_please"

@@ -1,0 +1,22 @@
+# env
+
+.env
+env.yaml
+env.yml
+env
+
+# go
+
+vendor
+
+# vscode
+
+.vscode
+
+# database
+
+*.db
+dbconfig.yml
+
+# pyhton
+__pycache__
