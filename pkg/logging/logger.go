@@ -301,3 +301,17 @@ func (l *LogBundle) Panic(err any, r *http.Request, stack string, params ...map[
 		fmt.Print(colors.Red + message + "\n" + stack + colors.Reset)
 	}
 }
+
+func (l *LogBundle) PanicMicroservice(err any, microservice string, stack string, params ...map[string]any) {
+	message := fmt.Sprintf("%v", err)
+	param := map[string]any{}
+	if len(params) > 0 {
+		param = params[0]
+	}
+	logFields := logrus.Fields{
+		"microservice": microservice,
+		"stack":        stack,
+		"params":       param,
+	}
+	l.pan.WithFields(logFields).Error(message)
+}

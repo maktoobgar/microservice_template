@@ -1,8 +1,10 @@
 package config
 
+import db "service/pkg/database"
+
 type (
 	Config struct {
-		Databases             []Database              `yaml:"databases"`
+		CurrentMicroservice   Microservice
 		Translator            Translator              `yaml:"translator"`
 		Logging               Logging                 `yaml:"logging"`
 		Gateway               Microservice            `yaml:"gateway"`
@@ -18,19 +20,6 @@ type (
 		SecretKey             string                  `yaml:"secret_key"`
 	}
 
-	Database struct {
-		Name     string `yaml:"name"`
-		Type     string `yaml:"type"`
-		Username string `yaml:"username"`
-		Password string `yaml:"password"`
-		DBName   string `yaml:"db_name"`
-		Host     string `yaml:"host"`
-		Port     string `yaml:"port"`
-		SSLMode  string `yaml:"ssl_mode"`
-		TimeZone string `yaml:"time_zone"`
-		Charset  string `yaml:"charset"`
-	}
-
 	Translator struct {
 		Path string `yaml:"path"`
 	}
@@ -44,7 +33,8 @@ type (
 	}
 
 	Microservice struct {
-		IP   string `yaml:"ip"`
-		Port string `yaml:"port"`
+		Databases map[string]db.Database `yaml:"databases"`
+		IP        string                 `yaml:"ip"`
+		Port      string                 `yaml:"port"`
 	}
 )

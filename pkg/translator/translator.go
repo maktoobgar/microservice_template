@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"io/fs"
 
-	// "github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
+	"gopkg.in/yaml.v3"
 )
 
 const (
 	// Format of how file names are specified in translation
 	// folder storage. it's like: message.en.json or message.fa.toml
-	fileFormat string = "translation.%s.json"
+	fileFormat string = "translation.%s.yml"
 	folderName string = "translations"
 )
 
@@ -36,7 +36,7 @@ func New(fileSystem fs.FS, defaultLanguage language.Tag, languages ...language.T
 		localizers:     map[string]*i18n.Localizer{},
 	}
 	translator.bundle = i18n.NewBundle(defaultLanguage)
-	// translator.bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
+	translator.bundle.RegisterUnmarshalFunc("yml", yaml.Unmarshal)
 
 	languages = append(languages, defaultLanguage)
 	err := translator.loadLanguages(languages...)

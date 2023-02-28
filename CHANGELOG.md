@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- 🎉 feat: auth microservice added
 - 🎉 feat: fixed gateway
 
 <!-- ## [0.0.2] - 2022-12-07

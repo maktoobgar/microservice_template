@@ -13,15 +13,15 @@ import (
 )
 
 type Database struct {
-	Type     string
-	Username string
-	Password string
-	DbName   string
-	Host     string
-	Port     string
-	SSLMode  string
-	TimeZone string
-	Charset  string
+	Type     string `yaml:"type"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	DbName   string `yaml:"db_name"`
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	SSLMode  string `yaml:"ssl_mode"`
+	TimeZone string `yaml:"time_zone"`
+	Charset  string `yaml:"charset"`
 }
 
 // creates connections and returns database query builders and its connections and error if anything wrong happened

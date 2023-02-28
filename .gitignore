@@ -19,4 +19,11 @@ vendor
 dbconfig.yml
 
 # pyhton
+
 __pycache__
+
+# ignore shortcuts
+
+/*/pkg
+/*/build
+/*/config

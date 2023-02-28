@@ -1,0 +1,10 @@
+# Gateway
+PageNotFound: "requested resource not found"
+BodyNotProvidedProperly: "all fields are not provided properly"
+CorsError: "access to this resource is not allowed"
+MethodNotAllowed: "requested method is not allowed"
+InternalServerError: "an internal server error happened"
+TimeoutError: "response duration timed out"
+
+# Auth
+EmailOrPhoneRequired: "at least email or phone needed"

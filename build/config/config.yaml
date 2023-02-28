@@ -3,16 +3,16 @@ databases:
     name: "test"
     db_name: "test.db"
 
-  # - name: "main"
-  #   type: "postgres"
-  #   username: "postgres"
-  #   password: "M123456789H"
-  #   db_name: "project_db"
-  #   host: "127.0.0.1"
-  #   port: 5432
-  #   ssl_mode: "disable"
-  #   time_zone: "Asia/Tehran"
-  #   charset: "utf8mb4"
+  - name: "main"
+    type: "postgres"
+    username: "postgres"
+    password: "M123456789H"
+    db_name: "project_db"
+    host: "127.0.0.1"
+    port: 5432
+    ssl_mode: "disable"
+    time_zone: "Asia/Tehran"
+    charset: "utf8mb4"
 
 translator:
   path: "../build/translations"
@@ -32,6 +32,20 @@ microservices:
   auth:
     ip: 127.0.0.1
     port: 3001
+    databases:
+      test:
+        type: "sqlite3"
+        db_name: "test.db"
+
+      #   type: "postgres"
+      #   username: "postgres"
+      #   password: "M123456789H"
+      #   db_name: "project_db"
+      #   host: "127.0.0.1"
+      #   port: 5432
+      #   ssl_mode: "disable"
+      #   time_zone: "Asia/Tehran"
+      #   charset: "utf8mb4"
 
 debug: true
 domain: ""
