@@ -1,6 +1,7 @@
 package g
 
 import (
+	_ "embed"
 	"net/http"
 
 	"service/config"
@@ -9,7 +10,18 @@ import (
 	"service/pkg/translator"
 )
 
+//go:embed version
+var Version string
+
+//go:embed name
+var Name string
+
+// Context type and keys
 type contextKey string
+
+var (
+	TranslateContext contextKey = "translate"
+)
 
 // Handling section
 type Handler struct {
@@ -33,8 +45,3 @@ var AuthMic *config.Microservice = nil
 
 // App
 var Server *http.Server = nil
-
-// Context Key Maker
-func ContextKey(key string) contextKey {
-	return contextKey(key)
-}

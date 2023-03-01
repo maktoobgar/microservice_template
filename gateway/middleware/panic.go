@@ -21,7 +21,7 @@ type PanicResponse struct {
 
 func Panic(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		translate := r.Context().Value("translate").(translator.TranslatorFunc)
+		translate := r.Context().Value(g.TranslateContext).(translator.TranslatorFunc)
 		defer func() {
 			errInterface := recover()
 			if errInterface == nil {

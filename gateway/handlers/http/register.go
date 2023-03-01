@@ -13,7 +13,7 @@ import (
 func register(w http.ResponseWriter, r *http.Request) {
 	req := &dto.RegisterRequest{}
 	ctx := r.Context()
-	translate := ctx.Value("translate").(translator.TranslatorFunc)
+	translate := ctx.Value(g.TranslateContext).(translator.TranslatorFunc)
 	utils.ParseBody(r.Body, req)
 	utils.ValidateBody(req, dto.RegisterValidator, translate)
 

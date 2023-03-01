@@ -70,6 +70,7 @@ func initialTranslator() {
 
 // Logger initialization
 func initialLogger() {
+	cfg.Logging.Path += "/" + g.Name
 	k := cfg.Logging
 	opt := logging.Option(k)
 	l, err := logging.New(&opt, cfg.Debug)

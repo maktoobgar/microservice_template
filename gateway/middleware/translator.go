@@ -14,7 +14,7 @@ func Translator(next http.Handler) http.Handler {
 		if lang == "" {
 			lang = "en"
 		}
-		ctx = context.WithValue(ctx, g.ContextKey("translate"), g.Translator.TranslateFunction(lang))
+		ctx = context.WithValue(ctx, g.TranslateContext, g.Translator.TranslateFunction(lang))
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
 	})
