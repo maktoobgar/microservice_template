@@ -314,4 +314,7 @@ func (l *LogBundle) PanicMicroservice(err any, microservice string, stack string
 		"params":       param,
 	}
 	l.pan.WithFields(logFields).Error(message)
+	if l.debug {
+		fmt.Print(colors.Red + message + "\n" + stack + colors.Reset)
+	}
 }

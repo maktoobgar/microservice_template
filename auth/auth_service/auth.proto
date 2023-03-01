@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package service.auth;
+option go_package = "auth/auth_service";
+
+message Error {
+    int32 Code = 1;
+    int32 Action = 2;
+    string Message = 3;
+}
+
+message User {
+    int32 ID = 1;
+    string PhoneNumber = 2;
+    string Email = 3;
+    bool PhoneNumberConfirmed = 4;
+    bool EmailConfirmed = 5;
+    string role = 6;
+    int64 JoinedDate = 7;
+}
+
+message LoginRequest {
+    string PhoneNumber = 1;
+    string Email = 2;
+    string Password = 3;
+}
+
+message LoginResponse {
+    Error Error = 1;
+    User User = 2;
+    string AccessToken = 3;
+    string RefreshToken = 4;
+}
+
+message RegisterRequest {
+    string PhoneNumber = 1;
+    string Password = 2;
+}
+
+message RegisterResponse {
+    Error Error = 1;
+}
+
+message IsPhoneNumberUniqueRequest {
+    string PhoneNumber = 2;
+}
+
+message IsPhoneNumberUniqueResponse {
+    Error Error = 1;
+    bool OK = 2;
+}
+
+service Auth {
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc Register (RegisterRequest) returns (RegisterResponse);
+    rpc IsPhoneNumberUnique (IsPhoneNumberUniqueRequest) returns (IsPhoneNumberUniqueResponse);
+}

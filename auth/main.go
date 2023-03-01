@@ -7,10 +7,10 @@ import (
 
 	"google.golang.org/grpc"
 
+	"service/auth/auth_service"
 	g "service/auth/global"
 	load "service/auth/load"
 	"service/auth/service"
-	"service/auth/service_definition"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	service_definition.RegisterAuthServer(s, service.New())
+	auth_service.RegisterAuthServer(s, service.New())
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

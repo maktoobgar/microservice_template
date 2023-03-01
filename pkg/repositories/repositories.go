@@ -84,7 +84,7 @@ func Select(table string, data any, keyValues map[string]any) string {
 			wheres = fmt.Sprintf("%s = %s", key, formatValue(value))
 			continue
 		}
-		wheres += " AND " + fmt.Sprintf("%s = %s", key, formatValue(value))
+		wheres += fmt.Sprintf(" AND %s = %s", key, formatValue(value))
 	}
 	return fmt.Sprintf("SELECT DISTINCT %s FROM %s WHERE %s;", keys, table, wheres)
 }
@@ -96,7 +96,20 @@ func Delete(table string, keyValues map[string]any) string {
 			wheres = fmt.Sprintf("%s = %s", key, formatValue(value))
 			continue
 		}
-		wheres += " AND " + fmt.Sprintf("%s = %s", key, formatValue(value))
+		wheres += fmt.Sprintf(" AND %s = %s", key, formatValue(value))
 	}
 	return fmt.Sprintf("DELETE FROM %s WHERE %s;", table, wheres)
+}
+
+func SelectCount(table string, keyValues map[string]any) string {
+	query := fmt.Sprintf("SELECT COUNT(*) as count FROM %s WHERE", table)
+	wheres := ""
+	for key, value := range keyValues {
+		if wheres == "" {
+			wheres = fmt.Sprintf("%s = %s", key, formatValue(value))
+			continue
+		}
+		wheres += fmt.Sprintf(" AND %s = %s", key, formatValue(value))
+	}
+	return fmt.Sprintf("%s %s;", query, wheres)
 }

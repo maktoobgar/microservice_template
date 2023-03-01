@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"service/pkg/errors"
-	"service/pkg/translator"
 )
 
 var allowed_methods = []string{
@@ -34,8 +33,6 @@ func Method(next http.Handler, methods ...string) http.Handler {
 		}
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		translate := ctx.Value("translate").(translator.TranslatorFunc)
 		currentMethod := strings.ToUpper(r.Method)
 		found := false
 		for i := range methods {
@@ -45,7 +42,7 @@ func Method(next http.Handler, methods ...string) http.Handler {
 			}
 		}
 		if !found {
-			panic(errors.New(errors.MethodNotAllowedStatus, errors.DoNothing, translate("MethodNotAllowed")))
+			panic(errors.New(errors.MethodNotAllowedStatus, errors.DoNothing, "MethodNotAllowed"))
 		}
 		next.ServeHTTP(w, r)
 	})

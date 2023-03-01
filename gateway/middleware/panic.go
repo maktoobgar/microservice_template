@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"runtime/debug"
 
@@ -29,12 +30,15 @@ func Panic(next http.Handler) http.Handler {
 			if err, ok := errInterface.(error); ok && errors.IsServerError(err) {
 				code, action, message, errors := errors.HttpError(err)
 				res := PanicResponse{
-					Message: message,
+					Message: translate(message),
 					Action:  action,
 					Code:    code,
 					Errors:  errors,
 				}
 				resBytes, _ := json.Marshal(res)
+				if g.CFG.Debug {
+					log.Println(res.Message)
+				}
 				w.WriteHeader(code)
 				w.Write(resBytes)
 			} else {

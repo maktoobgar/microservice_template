@@ -29,6 +29,8 @@ const (
 	ForbiddenStatus
 	// Timeout 408
 	TimeoutStatus
+	// Service Unavailable 503
+	ServiceUnavailable
 )
 
 const (
@@ -40,6 +42,8 @@ const (
 	Report
 	// Correct sent data and request again
 	Resend
+	// Try later
+	TryLater
 )
 
 var (
@@ -51,6 +55,7 @@ var (
 		MethodNotAllowedStatus: http.StatusMethodNotAllowed,
 		ForbiddenStatus:        http.StatusForbidden,
 		TimeoutStatus:          http.StatusRequestTimeout,
+		ServiceUnavailable:     http.StatusServiceUnavailable,
 	}
 )
 

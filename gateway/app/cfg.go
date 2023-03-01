@@ -79,10 +79,20 @@ func initialLogger() {
 	g.Logger = l
 }
 
+// Finds and places microservices into g
+func initialMicroservices() {
+	if auth, ok := g.CFG.Microservices["auth"]; ok {
+		g.AuthMic = &auth
+	} else {
+		log.Fatalln("auth microservice is not defined")
+	}
+}
+
 // Server initialization
 func init() {
 	setPwd()
 	initializeConfigs()
 	initialTranslator()
 	initialLogger()
+	initialMicroservices()
 }

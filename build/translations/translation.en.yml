@@ -5,6 +5,13 @@ CorsError: "access to this resource is not allowed"
 MethodNotAllowed: "requested method is not allowed"
 InternalServerError: "an internal server error happened"
 TimeoutError: "response duration timed out"
+AuthServiceUnavailable: "authentication service is not available at the time"
+ServiceDidNotFinishProperly: "service process did not finish properly"
 
 # Auth
 EmailOrPhoneRequired: "at least email or phone needed"
+PasswordDoesNotMatch: "provided password does not match with current account"
+CreateUserFailure: "user creation with provided fields is not possible"
+UserNotFound: "specified user does not exist"
+TokenGenerationFailed: "access token generation process failed"
+PhoneNumberDuplicationCheckFailed: "phone number duplication check failed"

@@ -9,6 +9,8 @@ import (
 	"service/pkg/translator"
 )
 
+type contextKey string
+
 // Handling section
 type Handler struct {
 	Handler func(w http.ResponseWriter, r *http.Request)
@@ -26,5 +28,13 @@ var CFG *config.Config = nil
 var Logger logging.Logger = nil
 var Translator translator.Translator = nil
 
+// Microservices
+var AuthMic *config.Microservice = nil
+
 // App
 var Server *http.Server = nil
+
+// Context Key Maker
+func ContextKey(key string) contextKey {
+	return contextKey(key)
+}

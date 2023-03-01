@@ -6,13 +6,10 @@ import (
 	g "service/gateway/global"
 
 	"service/pkg/errors"
-	"service/pkg/translator"
 )
 
 func notFound(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-	translate := ctx.Value("translate").(translator.TranslatorFunc)
-	panic(errors.New(errors.NotFoundStatus, errors.DoNothing, translate("PageNotFound")))
+	panic(errors.New(errors.NotFoundStatus, errors.DoNothing, "PageNotFound"))
 }
 
 var NotFound = g.Handler{

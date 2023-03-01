@@ -8,7 +8,6 @@ import (
 	g "service/gateway/global"
 
 	"service/pkg/errors"
-	"service/pkg/translator"
 )
 
 var allow_headers = "Origin, Content-Length, Content-Type"
@@ -27,9 +26,6 @@ func Cors(next http.Handler) http.Handler {
 		allow_origins[i] = strings.TrimSpace(allow_origins[i])
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		translate := ctx.Value("translate").(translator.TranslatorFunc)
-
 		// Check if origin exists
 		// Otherwise it is not a cors request
 		origin := r.Header.Get("Origin")
@@ -57,7 +53,7 @@ func Cors(next http.Handler) http.Handler {
 
 		// Forbid if origin does not match
 		if !found && len(allow_origins) != 0 && allow_origins[0] != "*" {
-			panic(errors.New(errors.ForbiddenStatus, errors.DoNothing, translate("CorsError")))
+			panic(errors.New(errors.ForbiddenStatus, errors.DoNothing, "CorsError"))
 		} else if strings.ToUpper(r.Method) == "OPTIONS" {
 			w.Header().Set("Vary", "Origin")
 			w.Header().Set("Access-Control-Max-Age", fmt.Sprint(g.CFG.MaxAge))

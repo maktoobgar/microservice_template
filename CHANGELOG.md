@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- 🎉 feat: added auth microservice with Login, Register and UniquePhoneNumber methods
 - 🎉 feat: auth microservice added
 - 🎉 feat: fixed gateway
 
