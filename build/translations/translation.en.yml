@@ -8,6 +8,14 @@ TimeoutError: "response duration timed out"
 AuthServiceUnavailable: "authentication service is not available at the time"
 ServiceDidNotFinishProperly: "service process did not finish properly"
 
+# Galidator
+NotAPhoneNumberOrEmailAddress: "this is not a phone number either an email address"
+Required: "this field is required"
+Max: "can't exceed $max characters"
+PhoneNumberDuplicated: "phone number has been registered before"
+Email: "has to be a valid email address"
+Phone: "has to be a valid phone number"
+
 # Auth
 EmailOrPhoneRequired: "at least email or phone needed"
 PasswordDoesNotMatch: "provided password does not match with current account"

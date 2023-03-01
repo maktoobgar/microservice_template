@@ -12,7 +12,7 @@ type LoginRequest struct {
 }
 
 var LoginValidator = gen.Validator(LoginRequest{}, galidator.Messages{
-	"or": "$field is not a phone number or email address",
+	"or": "NotAPhoneNumberOrEmailAddress",
 })
 
 type LoginResponse struct {

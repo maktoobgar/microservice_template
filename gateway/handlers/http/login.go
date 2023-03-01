@@ -15,7 +15,6 @@ import (
 )
 
 func login(w http.ResponseWriter, r *http.Request) {
-	panic("")
 	req := &dto.LoginRequest{}
 	ctx := r.Context()
 	translate := ctx.Value(g.TranslateContext).(translator.TranslatorFunc)

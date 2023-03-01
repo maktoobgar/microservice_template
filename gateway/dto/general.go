@@ -9,11 +9,11 @@ import (
 )
 
 var gen = galidator.G().CustomMessages(galidator.Messages{
-	"phone":               "passed phone number is not valid",
-	"email":               "passed email address is not valid",
-	"required":            "$field is required",
-	"max":                 "$field can't exceed $max characters",
-	"unique_phone_number": "$field is duplicated",
+	"phone":               "Phone",
+	"email":               "Email",
+	"required":            "Required",
+	"max":                 "Max",
+	"unique_phone_number": "PhoneNumberDuplicated",
 }).CustomValidators(galidator.Validators{
 	"unique_phone_number": uniquePhoneNumber,
 })

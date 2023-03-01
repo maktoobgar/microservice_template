@@ -1,0 +1,25 @@
+# Gateway
+PageNotFound: "صفحه مورد نظر یافت نشد"
+BodyNotProvidedProperly: "فرم به درستی پر نشده است"
+CorsError: "دسترسی به این منبع ممکن نیست"
+MethodNotAllowed: "درخواست با این متد امکان پذیر نیست"
+InternalServerError: "یک خطای داخلی رخ داده است"
+TimeoutError: "محدودیت زمان پاسخگویی به اتمام رسیده است"
+AuthServiceUnavailable: "سرویس احراز هویت در حال حاضر در دسترس نمیباشد"
+ServiceDidNotFinishProperly: "پردازش سرویس به درستی به اتمام نرسید"
+
+# Galidator
+NotAPhoneNumberOrEmailAddress: "ورودی نه یک شماره تماس و نه یک آدرس ایمیل است"
+Required: "این گزینه اجباریست"
+Max: "بیشتر از $max کاراکتر، مجاز نمیباشد"
+PhoneNumberDuplicated: "شماره تلفن قبلا در سامانه ثبت شده است"
+Email: "یک آدرس ایمیل معتبر وارد کنید"
+Phone: "یک شماره تلفن معتبر وارد کنید"
+
+# Auth
+EmailOrPhoneRequired: "حداقل ایمیل یا شماره تماس مورد نیاز است"
+PasswordDoesNotMatch: "پسوورد وارد شده معتبر نمیباشد"
+CreateUserFailure: "ایجاد کاربر با داده های داده شده امکان پذیر نمیباشد"
+UserNotFound: "کاربر مورد نظر یافت نشد"
+TokenGenerationFailed: "پروسه ساخت توکن دسترسی ناموفق بود"
+PhoneNumberDuplicationCheckFailed: "این شماره تلفن در سیستم موجود است"
