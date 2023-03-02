@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- 🎉 feat: me http handler added
 - 🐛 fix: translation process fixed
 - 🐛 fix: bug fixed for context key type(`translate` key)
 - 🎉 feat: added auth microservice with Login, Register and UniquePhoneNumber methods

@@ -10,11 +10,11 @@ import (
 	"service/pkg/repositories"
 )
 
-func (s *service) IsPhoneNumberUnique(ctx context.Context, in *auth_service.IsPhoneNumberUniqueRequest) (*auth_service.IsPhoneNumberUniqueResponse, error) {
-	res := &auth_service.IsPhoneNumberUniqueResponse{}
+func (s *service) IsEmailUnique(ctx context.Context, in *auth_service.IsEmailUniqueRequest) (*auth_service.IsEmailUniqueResponse, error) {
+	res := &auth_service.IsEmailUniqueResponse{}
 	err := s.Panic(func() *auth_service.Error {
 		query := repositories.SelectCount(models.UserName, map[string]any{
-			"phone_number": in.PhoneNumber,
+			"email": in.Email,
 		})
 		count := -1
 		err := g.DB.QueryRowContext(ctx, query).Scan(&count)
@@ -22,7 +22,7 @@ func (s *service) IsPhoneNumberUnique(ctx context.Context, in *auth_service.IsPh
 			return &auth_service.Error{
 				Code:    int32(errors.UnexpectedStatus),
 				Action:  int32(errors.Report),
-				Message: "PhoneNumberDuplicated",
+				Message: "EmailDuplicated",
 			}
 		}
 		res.OK = count == 0

@@ -24,7 +24,9 @@ const _ = grpc.SupportPackageIsVersion7
 type AuthClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	Me(ctx context.Context, in *MeRequest, opts ...grpc.CallOption) (*MeResponse, error)
 	IsPhoneNumberUnique(ctx context.Context, in *IsPhoneNumberUniqueRequest, opts ...grpc.CallOption) (*IsPhoneNumberUniqueResponse, error)
+	IsEmailUnique(ctx context.Context, in *IsEmailUniqueRequest, opts ...grpc.CallOption) (*IsEmailUniqueResponse, error)
 }
 
 type authClient struct {
@@ -53,9 +55,27 @@ func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...
 	return out, nil
 }
 
+func (c *authClient) Me(ctx context.Context, in *MeRequest, opts ...grpc.CallOption) (*MeResponse, error) {
+	out := new(MeResponse)
+	err := c.cc.Invoke(ctx, "/service.auth.Auth/Me", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authClient) IsPhoneNumberUnique(ctx context.Context, in *IsPhoneNumberUniqueRequest, opts ...grpc.CallOption) (*IsPhoneNumberUniqueResponse, error) {
 	out := new(IsPhoneNumberUniqueResponse)
 	err := c.cc.Invoke(ctx, "/service.auth.Auth/IsPhoneNumberUnique", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) IsEmailUnique(ctx context.Context, in *IsEmailUniqueRequest, opts ...grpc.CallOption) (*IsEmailUniqueResponse, error) {
+	out := new(IsEmailUniqueResponse)
+	err := c.cc.Invoke(ctx, "/service.auth.Auth/IsEmailUnique", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +88,9 @@ func (c *authClient) IsPhoneNumberUnique(ctx context.Context, in *IsPhoneNumberU
 type AuthServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	Me(context.Context, *MeRequest) (*MeResponse, error)
 	IsPhoneNumberUnique(context.Context, *IsPhoneNumberUniqueRequest) (*IsPhoneNumberUniqueResponse, error)
+	IsEmailUnique(context.Context, *IsEmailUniqueRequest) (*IsEmailUniqueResponse, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -82,8 +104,14 @@ func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*LoginResp
 func (UnimplementedAuthServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
+func (UnimplementedAuthServer) Me(context.Context, *MeRequest) (*MeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Me not implemented")
+}
 func (UnimplementedAuthServer) IsPhoneNumberUnique(context.Context, *IsPhoneNumberUniqueRequest) (*IsPhoneNumberUniqueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsPhoneNumberUnique not implemented")
+}
+func (UnimplementedAuthServer) IsEmailUnique(context.Context, *IsEmailUniqueRequest) (*IsEmailUniqueResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IsEmailUnique not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 
@@ -134,6 +162,24 @@ func _Auth_Register_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Auth_Me_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).Me(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.auth.Auth/Me",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).Me(ctx, req.(*MeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Auth_IsPhoneNumberUnique_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IsPhoneNumberUniqueRequest)
 	if err := dec(in); err != nil {
@@ -148,6 +194,24 @@ func _Auth_IsPhoneNumberUnique_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServer).IsPhoneNumberUnique(ctx, req.(*IsPhoneNumberUniqueRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Auth_IsEmailUnique_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IsEmailUniqueRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).IsEmailUnique(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.auth.Auth/IsEmailUnique",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).IsEmailUnique(ctx, req.(*IsEmailUniqueRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -168,8 +232,16 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Auth_Register_Handler,
 		},
 		{
+			MethodName: "Me",
+			Handler:    _Auth_Me_Handler,
+		},
+		{
 			MethodName: "IsPhoneNumberUnique",
 			Handler:    _Auth_IsPhoneNumberUnique_Handler,
+		},
+		{
+			MethodName: "IsEmailUnique",
+			Handler:    _Auth_IsEmailUnique_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

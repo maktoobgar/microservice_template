@@ -44,6 +44,8 @@ const (
 	Resend
 	// Try later
 	TryLater
+	// Refresh your access token
+	RefreshToken
 )
 
 var (

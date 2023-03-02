@@ -18,6 +18,7 @@ func basicMiddlewares(next http.Handler, methods ...string) http.Handler {
 func HTTP(mux *router.Router) {
 	// /api
 	{
+		mux.Handle("/api/me/", basicMiddlewares(httpHandler.Me, "GET"))
 		// /api/auth
 		{
 			mux.Handle("/api/auth/register/", basicMiddlewares(httpHandler.Register, "POST"))

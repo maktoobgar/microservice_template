@@ -41,8 +41,17 @@ message RegisterResponse {
     Error Error = 1;
 }
 
+message MeRequest {
+    string AccessToken = 1;
+}
+
+message MeResponse {
+    Error Error = 1;
+    User User = 2;
+}
+
 message IsPhoneNumberUniqueRequest {
-    string PhoneNumber = 2;
+    string PhoneNumber = 1;
 }
 
 message IsPhoneNumberUniqueResponse {
@@ -50,8 +59,19 @@ message IsPhoneNumberUniqueResponse {
     bool OK = 2;
 }
 
+message IsEmailUniqueRequest {
+    string Email = 1;
+}
+
+message IsEmailUniqueResponse {
+    Error Error = 1;
+    bool OK = 2;
+}
+
 service Auth {
     rpc Login (LoginRequest) returns (LoginResponse);
     rpc Register (RegisterRequest) returns (RegisterResponse);
+    rpc Me (MeRequest) returns (MeResponse);
     rpc IsPhoneNumberUnique (IsPhoneNumberUniqueRequest) returns (IsPhoneNumberUniqueResponse);
+    rpc IsEmailUnique (IsEmailUniqueRequest) returns (IsEmailUniqueResponse);
 }

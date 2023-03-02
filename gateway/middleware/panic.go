@@ -37,7 +37,7 @@ func Panic(next http.Handler) http.Handler {
 				}
 				resBytes, _ := json.Marshal(res)
 				if g.CFG.Debug {
-					log.Println(res.Message)
+					log.Println(message)
 				}
 				w.WriteHeader(code)
 				w.Write(resBytes)

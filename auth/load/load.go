@@ -60,7 +60,7 @@ func initializeConfigs() {
 	} else {
 		log.Fatalf("Microservice definition for %s not found", g.Name)
 	}
-	g.SecretKey = []byte(cfg.SecretKey)
+	g.SecretKeyBytes = []byte(cfg.SecretKey)
 	g.CFG = cfg
 }
 

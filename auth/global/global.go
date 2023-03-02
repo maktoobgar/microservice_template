@@ -21,7 +21,7 @@ var CFG *config.Config = nil
 var Logger logging.Logger = nil
 
 // AppSecret
-var SecretKey []byte = nil
+var SecretKeyBytes []byte = nil
 
 // Default DB
 var DB *sql.DB = nil

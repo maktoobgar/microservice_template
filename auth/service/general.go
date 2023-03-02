@@ -68,12 +68,12 @@ func (s *service) CreateUser(db *sql.DB, ctx context.Context, phone_number strin
 	return nil
 }
 
-func (s *service) GetUserByID(db *sql.DB, ctx context.Context, id string) (*models.User, *auth_service.Error) {
+func (s *service) GetUserByID(db *sql.DB, ctx context.Context, id int64) (*models.User, *auth_service.Error) {
 	user := &models.User{}
 	query := repositories.Select(user.Name(), user, map[string]any{
 		"id": id,
 	})
-	err := db.QueryRowContext(ctx, query).Scan(user)
+	err := db.QueryRowContext(ctx, query).Scan(&user.ID, &user.PhoneNumber, &user.Email, &user.Password, &user.PhoneNumberConfirmed, &user.EmailConfirmed, &user.Role, &user.JoinedDate)
 	if err != nil {
 		err := &auth_service.Error{
 			Code:    int32(errors.NotFoundStatus),
@@ -132,15 +132,15 @@ func (s *service) CreateAccessToken(user *models.User) (string, *auth_service.Er
 	expirationTime := time.Now().Add(24 * time.Hour)
 
 	claims := &models.Claims{
-		ID:   user.ID,
-		Type: models.AccessTokenType,
+		UserID: user.ID,
+		Type:   models.AccessTokenType,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(g.SecretKey)
+	tokenString, err := token.SignedString(g.SecretKeyBytes)
 	if err != nil {
 		return "", &auth_service.Error{
 			Code:    int32(errors.UnexpectedStatus),
@@ -156,15 +156,15 @@ func (s *service) CreateRefreshToken(user *models.User) (string, *auth_service.E
 	expirationTime := time.Now().Add(7 * 24 * time.Hour)
 
 	claims := &models.Claims{
-		ID:   user.ID,
-		Type: models.RefreshTokenType,
+		UserID: user.ID,
+		Type:   models.RefreshTokenType,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(g.SecretKey)
+	tokenString, err := token.SignedString(g.SecretKeyBytes)
 	if err != nil {
 		return "", &auth_service.Error{
 			Code:    int32(errors.UnexpectedStatus),
@@ -174,4 +174,34 @@ func (s *service) CreateRefreshToken(user *models.User) (string, *auth_service.E
 	}
 
 	return tokenString, nil
+}
+
+func (s *service) IsAccessTokenValid(accessToken string) (*models.Claims, *auth_service.Error) {
+	claims := &models.Claims{}
+	tkn, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
+		return g.SecretKeyBytes, nil
+	})
+	if err != nil {
+		return nil, &auth_service.Error{
+			Code:    int32(errors.UnauthorizedStatus),
+			Action:  int32(errors.ReSignIn),
+			Message: "InvalidToken",
+		}
+	}
+	if !tkn.Valid {
+		return nil, &auth_service.Error{
+			Code:    int32(errors.UnauthorizedStatus),
+			Action:  int32(errors.ReSignIn),
+			Message: "InvalidToken",
+		}
+	}
+	if claims.Type != models.AccessTokenType {
+		return nil, &auth_service.Error{
+			Code:    int32(errors.UnauthorizedStatus),
+			Action:  int32(errors.ReSignIn),
+			Message: "InvalidToken",
+		}
+	}
+
+	return claims, nil
 }

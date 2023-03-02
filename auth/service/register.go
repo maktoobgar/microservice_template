@@ -18,12 +18,9 @@ func (s *service) Register(ctx context.Context, in *auth_service.RegisterRequest
 		return nil
 	})()
 
-	if err != nil {
-		res.Error = err
-		if g.CFG.Debug {
-			log.Println(err)
-		}
-		return res, nil
+	res.Error = err
+	if g.CFG.Debug && err != nil {
+		log.Println(err)
 	}
 	return res, nil
 }

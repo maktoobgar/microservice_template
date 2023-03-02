@@ -46,13 +46,10 @@ func (s *service) Login(ctx context.Context, in *auth_service.LoginRequest) (*au
 
 		return nil
 	})()
-	res.Error = err
 
-	if err != nil {
-		if g.CFG.Debug {
-			log.Println(err)
-		}
-		return res, nil
+	res.Error = err
+	if g.CFG.Debug && err != nil {
+		log.Println(err)
 	}
 	return res, nil
 }
