@@ -128,11 +128,11 @@ func (s *service) CheckPasswordHash(password, hash string) bool {
 	return nil == bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 }
 
-func (s *service) CreateAccessToken(user *models.User) (string, *auth_service.Error) {
+func (s *service) CreateAccessToken(id int64) (string, *auth_service.Error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 
 	claims := &models.Claims{
-		UserID: user.ID,
+		UserID: id,
 		Type:   models.AccessTokenType,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
@@ -152,11 +152,11 @@ func (s *service) CreateAccessToken(user *models.User) (string, *auth_service.Er
 	return tokenString, nil
 }
 
-func (s *service) CreateRefreshToken(user *models.User) (string, *auth_service.Error) {
+func (s *service) CreateRefreshToken(id int64) (string, *auth_service.Error) {
 	expirationTime := time.Now().Add(7 * 24 * time.Hour)
 
 	claims := &models.Claims{
-		UserID: user.ID,
+		UserID: id,
 		Type:   models.RefreshTokenType,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
@@ -176,7 +176,7 @@ func (s *service) CreateRefreshToken(user *models.User) (string, *auth_service.E
 	return tokenString, nil
 }
 
-func (s *service) IsAccessTokenValid(accessToken string) (*models.Claims, *auth_service.Error) {
+func (s *service) GetClaimsFromAccessToken(accessToken string) (*models.Claims, *auth_service.Error) {
 	claims := &models.Claims{}
 	tkn, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
 		return g.SecretKeyBytes, nil
@@ -196,6 +196,36 @@ func (s *service) IsAccessTokenValid(accessToken string) (*models.Claims, *auth_
 		}
 	}
 	if claims.Type != models.AccessTokenType {
+		return nil, &auth_service.Error{
+			Code:    int32(errors.UnauthorizedStatus),
+			Action:  int32(errors.ReSignIn),
+			Message: "InvalidToken",
+		}
+	}
+
+	return claims, nil
+}
+
+func (s *service) GetClaimsFromRefreshToken(accessToken string) (*models.Claims, *auth_service.Error) {
+	claims := &models.Claims{}
+	tkn, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
+		return g.SecretKeyBytes, nil
+	})
+	if err != nil {
+		return nil, &auth_service.Error{
+			Code:    int32(errors.UnauthorizedStatus),
+			Action:  int32(errors.ReSignIn),
+			Message: "InvalidToken",
+		}
+	}
+	if !tkn.Valid {
+		return nil, &auth_service.Error{
+			Code:    int32(errors.UnauthorizedStatus),
+			Action:  int32(errors.ReSignIn),
+			Message: "InvalidToken",
+		}
+	}
+	if claims.Type != models.RefreshTokenType {
 		return nil, &auth_service.Error{
 			Code:    int32(errors.UnauthorizedStatus),
 			Action:  int32(errors.ReSignIn),

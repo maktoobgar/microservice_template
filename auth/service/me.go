@@ -10,7 +10,7 @@ import (
 func (s *service) Me(ctx context.Context, in *auth_service.MeRequest) (*auth_service.MeResponse, error) {
 	res := &auth_service.MeResponse{}
 	err := s.Panic(func() *auth_service.Error {
-		claims, err := s.IsAccessTokenValid(in.AccessToken)
+		claims, err := s.GetClaimsFromAccessToken(in.AccessToken)
 		if err != nil {
 			return err
 		}

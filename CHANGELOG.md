@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- 🎉 feat: refresh http handler added
 - 🎉 feat: me http handler added
 - 🐛 fix: translation process fixed
 - 🐛 fix: bug fixed for context key type(`translate` key)

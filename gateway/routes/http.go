@@ -23,6 +23,7 @@ func HTTP(mux *router.Router) {
 		{
 			mux.Handle("/api/auth/register/", basicMiddlewares(httpHandler.Register, "POST"))
 			mux.Handle("/api/auth/login/", basicMiddlewares(httpHandler.Login, "POST"))
+			mux.Handle("/api/auth/refresh/", basicMiddlewares(httpHandler.Refresh, "POST"))
 		}
 		mux.Handle("/api/.+/", basicMiddlewares(httpHandler.Hi, "GET"))
 	}

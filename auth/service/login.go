@@ -24,11 +24,11 @@ func (s *service) Login(ctx context.Context, in *auth_service.LoginRequest) (*au
 			}
 		}
 
-		accessToken, err := s.CreateAccessToken(user)
+		accessToken, err := s.CreateAccessToken(user.ID)
 		if err != nil {
 			return err
 		}
-		refreshToken, err := s.CreateRefreshToken(user)
+		refreshToken, err := s.CreateRefreshToken(user.ID)
 		if err != nil {
 			return err
 		}

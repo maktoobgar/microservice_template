@@ -27,6 +27,7 @@ type AuthClient interface {
 	Me(ctx context.Context, in *MeRequest, opts ...grpc.CallOption) (*MeResponse, error)
 	IsPhoneNumberUnique(ctx context.Context, in *IsPhoneNumberUniqueRequest, opts ...grpc.CallOption) (*IsPhoneNumberUniqueResponse, error)
 	IsEmailUnique(ctx context.Context, in *IsEmailUniqueRequest, opts ...grpc.CallOption) (*IsEmailUniqueResponse, error)
+	RefreshTokens(ctx context.Context, in *RefreshTokensRequest, opts ...grpc.CallOption) (*RefreshTokensResponse, error)
 }
 
 type authClient struct {
@@ -82,6 +83,15 @@ func (c *authClient) IsEmailUnique(ctx context.Context, in *IsEmailUniqueRequest
 	return out, nil
 }
 
+func (c *authClient) RefreshTokens(ctx context.Context, in *RefreshTokensRequest, opts ...grpc.CallOption) (*RefreshTokensResponse, error) {
+	out := new(RefreshTokensResponse)
+	err := c.cc.Invoke(ctx, "/service.auth.Auth/RefreshTokens", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServer is the server API for Auth service.
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type AuthServer interface {
 	Me(context.Context, *MeRequest) (*MeResponse, error)
 	IsPhoneNumberUnique(context.Context, *IsPhoneNumberUniqueRequest) (*IsPhoneNumberUniqueResponse, error)
 	IsEmailUnique(context.Context, *IsEmailUniqueRequest) (*IsEmailUniqueResponse, error)
+	RefreshTokens(context.Context, *RefreshTokensRequest) (*RefreshTokensResponse, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -112,6 +123,9 @@ func (UnimplementedAuthServer) IsPhoneNumberUnique(context.Context, *IsPhoneNumb
 }
 func (UnimplementedAuthServer) IsEmailUnique(context.Context, *IsEmailUniqueRequest) (*IsEmailUniqueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsEmailUnique not implemented")
+}
+func (UnimplementedAuthServer) RefreshTokens(context.Context, *RefreshTokensRequest) (*RefreshTokensResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshTokens not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 
@@ -216,6 +230,24 @@ func _Auth_IsEmailUnique_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Auth_RefreshTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshTokensRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).RefreshTokens(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.auth.Auth/RefreshTokens",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).RefreshTokens(ctx, req.(*RefreshTokensRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Auth_ServiceDesc is the grpc.ServiceDesc for Auth service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +274,10 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "IsEmailUnique",
 			Handler:    _Auth_IsEmailUnique_Handler,
+		},
+		{
+			MethodName: "RefreshTokens",
+			Handler:    _Auth_RefreshTokens_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

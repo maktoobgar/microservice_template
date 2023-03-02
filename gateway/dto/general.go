@@ -22,12 +22,16 @@ func uniquePhoneNumber(input interface{}) bool {
 	s := calls.NewAuthService()
 	ok := false
 	s.CallAuth(func(auth auth_service.AuthClient) {
-		res, err := auth.IsPhoneNumberUnique(context.TODO(), &auth_service.IsPhoneNumberUniqueRequest{
+		resGrpc, err := auth.IsPhoneNumberUnique(context.TODO(), &auth_service.IsPhoneNumberUniqueRequest{
 			PhoneNumber: input.(string),
 		})
-		s.Check(res.Error, err)
+		if resGrpc != nil {
+			s.Check(resGrpc.Error, err)
+		} else {
+			s.Check(nil, err)
+		}
 
-		ok = res.OK
+		ok = resGrpc.OK
 	})
 	return ok
 }

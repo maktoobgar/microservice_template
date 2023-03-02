@@ -68,10 +68,21 @@ message IsEmailUniqueResponse {
     bool OK = 2;
 }
 
+message RefreshTokensRequest {
+    string RefreshToken = 1;
+}
+
+message RefreshTokensResponse {
+    Error Error = 1;
+    string AccessToken = 2;
+    string RefreshToken = 3;
+}
+
 service Auth {
     rpc Login (LoginRequest) returns (LoginResponse);
     rpc Register (RegisterRequest) returns (RegisterResponse);
     rpc Me (MeRequest) returns (MeResponse);
     rpc IsPhoneNumberUnique (IsPhoneNumberUniqueRequest) returns (IsPhoneNumberUniqueResponse);
     rpc IsEmailUnique (IsEmailUniqueRequest) returns (IsEmailUniqueResponse);
+    rpc RefreshTokens (RefreshTokensRequest) returns (RefreshTokensResponse);
 }
