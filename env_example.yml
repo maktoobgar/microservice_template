@@ -13,15 +13,19 @@ databases:
   - type: "sqlite3"
     name: "test"
     db_name: "test.db"
+  - type: "sqlite3"
+    name: "main"
+    db_name: "test.db"
 
 # If you change debug to false, don't forget to 
 # add a database with it's name equal to "main"
 debug: true
 
 gateway:
-  ip: 0.0.0.0
+  ip: 127.0.0.1
 
-secret_key: "update_me_please"
+allow_origins: "http://127.0.0.1:3000, http://localhost:3000"
+secret_key: "Replace Me"
 # you can fill this value with `python3 auto.py generate` script
 
 # For more example see build/config/config.yaml config file

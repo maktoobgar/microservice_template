@@ -63,32 +63,16 @@ def generate_secret_key(do_print: bool) -> None:
         f"\"{key}\"", "secret_key", read_file(file_address), "secret_key: "))
 
 
-def install_dependencies() -> None:
-    print("===Installing Dependencies===\n")
-    if os.system("go mod download -x all") != 0:
-        print("installing dependencies failed")
-        return
-
-    print("===Done===\n")
-
-    print("===Setup Config Files===\n")
-    if os.system("cp dbconfig_example.yml dbconfig.yml && cp env_example.yml env.yml") != 0:
-        print("dbconfig_example.yml or env_example.yml does not exists")
-        return
-
-    print("===Done===\n")
-
-
-def create_python_env() -> None:
-    print("===Creating env Folder===\n")
-    os.system("python3 -m venv env")
-    print("===Done===\n")
-
-
 def activate_githooks() -> None:
     print("===Activating Githooks===\n")
     os.system("python3 .githooks/install.py")
     print("===Done===\n")
+
+
+def create_from_example_files() -> None:
+    print("===Creating Config Files From Examples===\n")
+    os.system("cp dbconfig_example.yml dbconfig.yml")
+    os.system("cp env_example.yml env.yml")
 
 
 def main() -> None:
@@ -96,9 +80,8 @@ def main() -> None:
         generate_secret_key(True)
 
     elif sys.argv[1].lower() == "setup":
-        install_dependencies()
+        create_from_example_files()
         generate_secret_key(False)
-        create_python_env()
         activate_githooks()
 
 
