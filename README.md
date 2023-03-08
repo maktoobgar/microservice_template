@@ -1,4 +1,4 @@
-# Get Up and Running for Development
+# Get up and Running for Development
 
 1. Have golang installed.
 2. Run:
