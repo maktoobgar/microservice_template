@@ -52,7 +52,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 				Email:                resGrpc.User.Email,
 				PhoneNumberConfirmed: resGrpc.User.PhoneNumberConfirmed,
 				EmailConfirmed:       resGrpc.User.EmailConfirmed,
-				Role:                 resGrpc.User.Role,
 				JoinedDate:           time.Unix(resGrpc.User.JoinedDate, 0),
 			},
 		}

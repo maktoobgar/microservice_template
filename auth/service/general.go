@@ -73,7 +73,7 @@ func (s *service) GetUserByID(db *sql.DB, ctx context.Context, id int64) (*model
 	query := repositories.Select(user.Name(), user, map[string]any{
 		"id": id,
 	})
-	err := db.QueryRowContext(ctx, query).Scan(&user.ID, &user.PhoneNumber, &user.Email, &user.Password, &user.PhoneNumberConfirmed, &user.EmailConfirmed, &user.Role, &user.JoinedDate)
+	err := db.QueryRowContext(ctx, query).Scan(&user.ID, &user.PhoneNumber, &user.Email, &user.Password, &user.PhoneNumberConfirmed, &user.EmailConfirmed, &user.AccessToken, &user.RefreshToken, &user.JoinedDate)
 	if err != nil {
 		err := &auth_service.Error{
 			Code:    int32(errors.NotFoundStatus),
@@ -107,7 +107,7 @@ func (s *service) GetUserByEmailOrPhone(db *sql.DB, ctx context.Context, email, 
 	}
 
 	// id, phone_number, email, password, phone_number_confirmed, email_confirmed, role, joined_date FROM users
-	err := db.QueryRowContext(ctx, query).Scan(&user.ID, &user.PhoneNumber, &user.Email, &user.Password, &user.PhoneNumberConfirmed, &user.EmailConfirmed, &user.Role, &user.JoinedDate)
+	err := db.QueryRowContext(ctx, query).Scan(&user.ID, &user.PhoneNumber, &user.Email, &user.Password, &user.PhoneNumberConfirmed, &user.EmailConfirmed, &user.AccessToken, &user.RefreshToken, &user.JoinedDate)
 	if err != nil {
 		return nil, &auth_service.Error{
 			Code:    int32(errors.NotFoundStatus),
@@ -234,4 +234,48 @@ func (s *service) GetClaimsFromRefreshToken(accessToken string) (*models.Claims,
 	}
 
 	return claims, nil
+}
+
+func (s *service) UserHasAccessToken(user *models.User, token string) *auth_service.Error {
+	if user.AccessToken == token {
+		return nil
+	}
+
+	return &auth_service.Error{
+		Code:    int32(errors.UnauthorizedStatus),
+		Action:  int32(errors.ReSignIn),
+		Message: "InvalidToken",
+	}
+}
+
+func (s *service) UserHasRefreshToken(user *models.User, token string) *auth_service.Error {
+	if user.RefreshToken == token {
+		return nil
+	}
+
+	return &auth_service.Error{
+		Code:    int32(errors.UnauthorizedStatus),
+		Action:  int32(errors.ReSignIn),
+		Message: "InvalidToken",
+	}
+}
+
+func (s *service) UpdateAccessRefreshToken(db *sql.DB, ctx context.Context, user *models.User) *auth_service.Error {
+	query := repositories.UpdateSpecific(user.Name(), map[string]any{
+		"access_token":  user.AccessToken,
+		"refresh_token": user.RefreshToken,
+	}, map[string]any{
+		"id": user.ID,
+	})
+
+	_, err := db.ExecContext(ctx, query)
+	if err != nil {
+		return &auth_service.Error{
+			Code:    int32(errors.InvalidStatus),
+			Action:  int32(errors.Resend),
+			Message: "UpdateUserFailed",
+		}
+	}
+
+	return nil
 }

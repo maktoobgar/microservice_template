@@ -15,7 +15,6 @@ message User {
     string Email = 3;
     bool PhoneNumberConfirmed = 4;
     bool EmailConfirmed = 5;
-    string role = 6;
     int64 JoinedDate = 7;
 }
 

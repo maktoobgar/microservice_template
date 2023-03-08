@@ -20,13 +20,17 @@ func (s *service) Me(ctx context.Context, in *auth_service.MeRequest) (*auth_ser
 			return err
 		}
 
+		err = s.UserHasAccessToken(user, in.AccessToken)
+		if err != nil {
+			return err
+		}
+
 		res.User = &auth_service.User{
 			ID:                   int32(user.ID),
 			PhoneNumber:          user.PhoneNumber,
 			Email:                user.Email,
 			PhoneNumberConfirmed: user.PhoneNumberConfirmed,
 			EmailConfirmed:       user.EmailConfirmed,
-			Role:                 user.Role,
 			JoinedDate:           user.JoinedDate.Unix(),
 		}
 

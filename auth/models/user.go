@@ -11,7 +11,8 @@ type User struct {
 	Password             string    `db:"password" json:"-"`
 	PhoneNumberConfirmed bool      `db:"phone_number_confirmed" json:"-" skipInsert:"+"`
 	EmailConfirmed       bool      `db:"email_confirmed" json:"-" skipInsert:"+"`
-	Role                 string    `db:"role" json:"role" skipInsert:"+"`
+	AccessToken          string    `db:"access_token" json:"-"`
+	RefreshToken         string    `db:"refresh_token" json:"-"`
 	JoinedDate           time.Time `db:"joined_date" json:"joined_date"`
 }
 

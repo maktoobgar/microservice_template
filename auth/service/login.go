@@ -32,13 +32,21 @@ func (s *service) Login(ctx context.Context, in *auth_service.LoginRequest) (*au
 		if err != nil {
 			return err
 		}
+
+		user.AccessToken = accessToken
+		user.RefreshToken = refreshToken
+
+		err = s.UpdateAccessRefreshToken(g.DB, ctx, user)
+		if err != nil {
+			return err
+		}
+
 		res.User = &auth_service.User{
 			ID:                   int32(user.ID),
 			PhoneNumber:          user.PhoneNumber,
 			Email:                user.Email,
 			PhoneNumberConfirmed: user.PhoneNumberConfirmed,
 			EmailConfirmed:       user.EmailConfirmed,
-			Role:                 user.Role,
 			JoinedDate:           user.JoinedDate.Unix(),
 		}
 		res.AccessToken = accessToken

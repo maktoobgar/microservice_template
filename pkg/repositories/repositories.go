@@ -113,3 +113,25 @@ func SelectCount(table string, keyValues map[string]any) string {
 	}
 	return fmt.Sprintf("%s %s;", query, wheres)
 }
+
+func UpdateSpecific(table string, updates map[string]any, keyValues map[string]any) string {
+	query := fmt.Sprintf("UPDATE %s SET ", table)
+	sets := ""
+	for key, value := range updates {
+		if sets == "" {
+			sets = fmt.Sprintf("%s = %s", key, formatValue(value))
+			continue
+		}
+		sets += fmt.Sprintf(", %s = %s", key, formatValue(value))
+	}
+	wheres := ""
+	for key, value := range keyValues {
+		if wheres == "" {
+			wheres = fmt.Sprintf("%s = %s", key, formatValue(value))
+			continue
+		}
+		wheres += fmt.Sprintf(" AND %s = %s", key, formatValue(value))
+	}
+	query += sets + " WHERE " + wheres + ";"
+	return query
+}
